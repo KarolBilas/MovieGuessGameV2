@@ -40,20 +40,34 @@ public class Game {
 
     }
 
-    static String printTitlePuzzle(String movieTitle) {
+    static String puzzledTitle(String movieTitle, String guessLetter) {
         //initialize variable and get title length
-        String puzzledMovieTitle = "";
+        String puzzledTitle = "";
         int titleLength = movieTitle.length();
         //loop through letters and convert characters to underscores leaving space unchanged
         for (int i = 0; i < titleLength; i++) {
-            if(movieTitle.charAt(i) != ' '){
-                puzzledMovieTitle += "_";
+            if (guessLetter.contains(Character.toString(movieTitle.charAt(i)))) {
+                puzzledTitle += movieTitle.charAt(i);
+            } else if (movieTitle.charAt(i) != ' ') {
+                puzzledTitle += "_";
             } else {
-                puzzledMovieTitle += " ";
+                puzzledTitle += " ";
             }
 
         }
-        return puzzledMovieTitle;
+        return puzzledTitle;
+    }
+
+    static char guessLetter(int tries) {
+
+        //print game instructions
+        System.out.println("Guess the movie name! You have " + tries + " chances remaining");
+        System.out.println("Choose a letter: ");
+
+        //grab input and limit it to first letter to prevent spam
+        Scanner scanner = new Scanner(System.in);
+        char letter = scanner.nextLine().charAt(0);
+        return letter;
     }
 
 }
