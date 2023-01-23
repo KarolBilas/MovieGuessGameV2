@@ -39,4 +39,21 @@ public class Game {
         return movieName;
 
     }
+
+    static String printTitlePuzzle(String movieTitle) {
+        //initialize variable and get title length
+        String puzzledMovieTitle = "";
+        int titleLength = movieTitle.length();
+        //loop through letters and convert characters to underscores leaving space unchanged
+        for (int i = 0; i < titleLength; i++) {
+            if(movieTitle.charAt(i) != ' '){
+                puzzledMovieTitle += "_";
+            } else {
+                puzzledMovieTitle += " ";
+            }
+
+        }
+        return puzzledMovieTitle;
+    }
+
 }
