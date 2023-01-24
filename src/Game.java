@@ -48,7 +48,6 @@ public class Game {
         for (int i = 0; i < titleLength; i++) {
             if (guessLetter.contains(Character.toString(movieTitle.charAt(i)))) {
                 puzzledTitle += movieTitle.charAt(i);
-
             } else if (movieTitle.charAt(i) != ' ') {
                 puzzledTitle += "_";
             } else {
@@ -59,27 +58,40 @@ public class Game {
         return puzzledTitle;
     }
 
-    static char guessLetter(int tries) {
-
+    static char guessLetter(String movieTitle) {
         //grab input and limit it to first letter to prevent spam
         Scanner scanner = new Scanner(System.in);
         char letter = scanner.nextLine().charAt(0);
+        //check if movie title contains that letter and reduce chances if not
+        if(!movieTitle.contains(Character.toString(letter))){
+            Main.tries--;
+            Main.message = "Wrong guess! ";
+        } else {
+            Main.message = "Correct! ";
+        }
+
+
         return letter;
     }
 
-    static boolean victoryCheck(String puzzledTitle){
+    static boolean victoryCheck(String puzzledTitle) {
+        //get title and variables
         int titleLength = puzzledTitle.length();
         boolean victoryCheck = false;
         int uncoveredLetters = 0;
+        //loop through letters and check if there are any underscores
         for (int i = 0; i < titleLength; i++) {
             if (puzzledTitle.charAt(i) == '_') {
-                 uncoveredLetters ++;
+                uncoveredLetters++;
             }
         }
-        if(uncoveredLetters == 0){
+        //if there is no underscores the title has been guessed
+        if (uncoveredLetters == 0) {
             victoryCheck = true;
         }
         return victoryCheck;
     }
+
+
 
 }
