@@ -1,46 +1,35 @@
 import java.io.File;
 import java.util.Scanner;
-
-public class Game {
-
-    static String pickMovie() throws Exception {
+ public class Game {
+    static String pickMovie(String filename) throws Exception {
         //initialize variables
-        File file = new File("movies.txt");
+        File file = new File(filename);
         Scanner fileScanner = new Scanner(file);
         int fileRows = 0;
-
         //loop through file to determine number of rows
         while (fileScanner.hasNextLine()) {
             fileScanner.nextLine();
             fileRows++;
         }
-
         //declare array with size equal to number of file rows
         String[] movieList = new String[fileRows];
-
         //there must be more elegant way to reset scanner but dont know it yet
         Scanner fileScanner2 = new Scanner(file);
-
         //put each row into separate cell of the array
         fileRows = 0;
         while (fileScanner2.hasNextLine()) {
             String line = fileScanner2.nextLine();
             movieList[fileRows] = line;
             fileRows++;
-
         }
-
         //generate random number with maximum equal to number of rows in file
         double random = Math.random() * fileRows;
         int randomRow = (int) random;
-
         //get randomly generated movie name from array
         String movieName = movieList[randomRow];
         return movieName;
-
     }
-
-    static String puzzledTitle(String movieTitle, String guessLetter) {
+     static String puzzledTitle(String movieTitle, String guessLetter) {
         //initialize variable and get title length
         String puzzledTitle = "";
         int titleLength = movieTitle.length();
@@ -53,28 +42,37 @@ public class Game {
             } else {
                 puzzledTitle += " ";
             }
-
         }
         return puzzledTitle;
     }
-
-    static char guessLetter(String movieTitle) {
+     static char guessLetter(String movieTitle) throws Exception {
         //grab input and limit it to first letter to prevent spam
-        Scanner scanner = new Scanner(System.in);
-        char letter = scanner.nextLine().charAt(0);
-        //check if movie title contains that letter and reduce chances if not
-        if(!movieTitle.contains(Character.toString(letter))){
-            Main.tries--;
-            Main.message = "Wrong guess! ";
-        } else {
-            Main.message = "Correct! ";
+        char letter = '0';
+        try {
+            Scanner scanner = new Scanner(System.in);
+            letter = scanner.nextLine().charAt(0);
+            //check if movie title contains that letter and reduce chances if not
+            if (!movieTitle.contains(Character.toString(letter))) {
+                //check if wrong letter was used before reducing chances
+                if (!Main.guessedLetters.contains(Character.toString(letter))) {
+                    Main.tries--;
+                    Main.message = "Wrong guess! ";
+                } else {
+                    Main.message = "You have tried this letter! ";
+                }
+             } else {
+                if (Main.guessedLetters.contains(Character.toString(letter))) {
+                    Main.message = "You have tried this letter! ";
+                } else {
+                    Main.message = "Correct! ";
+                }
+             }
+        } catch (StringIndexOutOfBoundsException e) {
+            Main.message = "Letter cannot be empty! ";
         }
-
-
         return letter;
     }
-
-    static boolean victoryCheck(String puzzledTitle) {
+     static boolean victoryCheck(String puzzledTitle) {
         //get title and variables
         int titleLength = puzzledTitle.length();
         boolean victoryCheck = false;
@@ -91,7 +89,4 @@ public class Game {
         }
         return victoryCheck;
     }
-
-
-
-}
+ }
